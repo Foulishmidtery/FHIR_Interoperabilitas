@@ -1,0 +1,1359 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FHIR Interoperability System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .page-section {
+        display: none;
+      }
+      .page-section.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <div class="logo-icon">🔗</div>
+            <div>
+              <div class="logo-text">FHIR Hub</div>
+              <div class="logo-subtitle">Interoperability System</div>
+            </div>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <div class="nav-section">
+            <div class="nav-section-title">Menu Utama</div>
+            <div class="nav-item active" onclick="showPage('dashboard')">
+              <span class="nav-icon">📊</span><span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="showPage('resources')">
+              <span class="nav-icon">📋</span><span>FHIR Resources</span
+              ><span class="nav-badge">3</span>
+            </div>
+            <div class="nav-item" onclick="showPage('connections')">
+              <span class="nav-icon">🔌</span><span>Koneksi Sistem</span>
+            </div>
+            <div class="nav-item" onclick="showPage('logs')">
+              <span class="nav-icon">📜</span><span>Log Pertukaran</span>
+            </div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-title">Aksi</div>
+            <div class="nav-item" onclick="App.openModal('sendModal')">
+              <span class="nav-icon">📤</span><span>Kirim Resource</span>
+            </div>
+            <div class="nav-item" onclick="App.openModal('validateModal')">
+              <span class="nav-icon">✅</span><span>Validasi Data</span>
+            </div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="user-avatar">AD</div>
+            <div class="user-info">
+              <div class="user-name">Admin System</div>
+              <div class="user-role">Administrator</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="header">
+          <div class="header-left">
+            <button class="menu-toggle">☰</button>
+            <div>
+              <h1 class="page-title" id="pageTitle">Dashboard</h1>
+              <div class="breadcrumb">
+                <span>FHIR Hub</span><span class="breadcrumb-separator">/</span
+                ><span id="pageBreadcrumb">Dashboard</span>
+              </div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button class="header-btn">
+              <span class="notification-dot"></span>🔔
+            </button>
+            <button class="header-btn">⚙️</button>
+          </div>
+        </header>
+
+        <!-- DASHBOARD PAGE -->
+        <div class="page-content page-section active" id="page-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon primary">👥</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Pasien</div>
+                <div class="stat-value">1,247</div>
+                <span class="stat-change positive">↑ 12%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon success">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">Observations</div>
+                <div class="stat-value">8,934</div>
+                <span class="stat-change positive">↑ 8%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon warning">🏥</div>
+              <div class="stat-content">
+                <div class="stat-label">Encounters</div>
+                <div class="stat-value">2,156</div>
+                <span class="stat-change positive">↑ 5%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon info">🔗</div>
+              <div class="stat-content">
+                <div class="stat-label">Koneksi Aktif</div>
+                <div class="stat-value">3/5</div>
+                <span class="stat-change negative">1 offline</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-2 gap-lg"
+            style="grid-template-columns: 2fr 1fr"
+          >
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">📈 Aktivitas Pertukaran Data</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <svg viewBox="0 0 600 200" style="width: 100%; height: 100%">
+                    <defs>
+                      <linearGradient
+                        id="sendGrad"
+                        x1="0%"
+                        y1="0%"
+                        x2="0%"
+                        y2="100%"
+                      >
+                        <stop
+                          offset="0%"
+                          style="stop-color: #00bcd4; stop-opacity: 0.5"
+                        />
+                        <stop
+                          offset="100%"
+                          style="stop-color: #00bcd4; stop-opacity: 0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="recvGrad"
+                        x1="0%"
+                        y1="0%"
+                        x2="0%"
+                        y2="100%"
+                      >
+                        <stop
+                          offset="0%"
+                          style="stop-color: #10b981; stop-opacity: 0.5"
+                        />
+                        <stop
+                          offset="100%"
+                          style="stop-color: #10b981; stop-opacity: 0"
+                        />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,180 L100,160 L200,100 L300,60 L400,90 L500,120 L600,140 L600,200 L0,200 Z"
+                      fill="url(#sendGrad)"
+                    />
+                    <path
+                      d="M0,170 L100,150 L200,90 L300,50 L400,85 L500,130 L600,150"
+                      stroke="#00bcd4"
+                      stroke-width="3"
+                      fill="none"
+                    />
+                    <path
+                      d="M0,175 L100,155 L200,85 L300,45 L400,95 L500,135 L600,155 L600,200 L0,200 Z"
+                      fill="url(#recvGrad)"
+                    />
+                    <path
+                      d="M0,175 L100,155 L200,85 L300,45 L400,95 L500,135 L600,155"
+                      stroke="#10b981"
+                      stroke-width="3"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
+                <div class="flex gap-lg mt-md" style="justify-content: center">
+                  <div class="flex items-center gap-sm">
+                    <span
+                      style="
+                        width: 12px;
+                        height: 12px;
+                        background: #00bcd4;
+                        border-radius: 2px;
+                      "
+                    ></span
+                    ><span class="text-muted">Dikirim</span>
+                  </div>
+                  <div class="flex items-center gap-sm">
+                    <span
+                      style="
+                        width: 12px;
+                        height: 12px;
+                        background: #10b981;
+                        border-radius: 2px;
+                      "
+                    ></span
+                    ><span class="text-muted">Diterima</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">🔌 Status Koneksi</h3>
+              </div>
+              <div class="card-body">
+                <div class="connection-list">
+                  <div class="connection-item">
+                    <div class="connection-icon">🏥</div>
+                    <div class="connection-info">
+                      <div class="connection-name">RS Harapan Kita</div>
+                      <div class="connection-url">fhir.harapankita.id</div>
+                    </div>
+                    <div class="connection-status">
+                      <span class="status-dot online"></span
+                      ><span class="text-success">Online</span>
+                    </div>
+                  </div>
+                  <div class="connection-item">
+                    <div class="connection-icon">🔬</div>
+                    <div class="connection-info">
+                      <div class="connection-name">Lab Prodia</div>
+                      <div class="connection-url">api.prodia.co.id</div>
+                    </div>
+                    <div class="connection-status">
+                      <span class="status-dot online"></span
+                      ><span class="text-success">Online</span>
+                    </div>
+                  </div>
+                  <div class="connection-item">
+                    <div class="connection-icon">🏨</div>
+                    <div class="connection-info">
+                      <div class="connection-name">RS Sardjito</div>
+                      <div class="connection-url">api.sardjito.ac.id</div>
+                    </div>
+                    <div class="connection-status">
+                      <span class="status-dot offline"></span
+                      ><span class="text-error">Offline</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-2 gap-lg mt-lg">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">⚡ Aksi Cepat</h3>
+              </div>
+              <div class="card-body">
+                <div class="quick-actions">
+                  <div class="quick-action" onclick="showPage('resources')">
+                    <div class="quick-action-icon">👥</div>
+                    <div class="quick-action-text">Kelola Pasien</div>
+                  </div>
+                  <div
+                    class="quick-action"
+                    onclick="App.openModal('sendModal')"
+                  >
+                    <div class="quick-action-icon">📤</div>
+                    <div class="quick-action-text">Kirim Resource</div>
+                  </div>
+                  <div
+                    class="quick-action"
+                    onclick="App.openModal('validateModal')"
+                  >
+                    <div class="quick-action-icon">✅</div>
+                    <div class="quick-action-text">Validasi FHIR</div>
+                  </div>
+                  <div class="quick-action" onclick="showPage('connections')">
+                    <div class="quick-action-icon">🔗</div>
+                    <div class="quick-action-text">Tambah Koneksi</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">🕐 Aktivitas Terbaru</h3>
+              </div>
+              <div class="card-body">
+                <div class="activity-timeline">
+                  <div class="activity-item">
+                    <div class="activity-dot send"></div>
+                    <div class="activity-content">
+                      <div class="activity-title">
+                        <strong>Patient</strong> dikirim ke RS Harapan Kita
+                      </div>
+                      <div class="activity-meta">145ms • 2 menit lalu</div>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-dot receive"></div>
+                    <div class="activity-content">
+                      <div class="activity-title">
+                        <strong>Observation</strong> diterima dari Lab Prodia
+                      </div>
+                      <div class="activity-meta">234ms • 5 menit lalu</div>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-dot error"></div>
+                    <div class="activity-content">
+                      <div class="activity-title">
+                        <strong>Error</strong> koneksi ke RS Sardjito timeout
+                      </div>
+                      <div class="activity-meta">5000ms • 15 menit lalu</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESOURCES PAGE -->
+        <div class="page-content page-section" id="page-resources">
+          <div class="card mb-lg">
+            <div class="card-body">
+              <div class="flex items-center gap-md" style="flex-wrap: wrap">
+                <div class="resource-tags">
+                  <span
+                    class="resource-tag active"
+                    onclick="filterRes('all', this)"
+                    >Semua</span
+                  >
+                  <span
+                    class="resource-tag"
+                    onclick="filterRes('Patient', this)"
+                    >👥 Patient</span
+                  >
+                  <span
+                    class="resource-tag"
+                    onclick="filterRes('Observation', this)"
+                    >📊 Observation</span
+                  >
+                  <span
+                    class="resource-tag"
+                    onclick="filterRes('Encounter', this)"
+                    >🏥 Encounter</span
+                  >
+                </div>
+                <div style="flex: 1"></div>
+                <input
+                  type="text"
+                  class="form-input search-input"
+                  placeholder="Cari resource..."
+                  style="max-width: 300px"
+                  oninput="searchRes(this.value)"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="card mb-lg res-section" data-type="Patient">
+            <div class="card-header">
+              <h3 class="card-title">👥 Patient Resources</h3>
+              <span class="badge badge-primary">5 records</span>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Identifier</th>
+                      <th>Nama</th>
+                      <th>Tanggal Lahir</th>
+                      <th>Gender</th>
+                      <th>Sumber</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">PAT-001</code>
+                      </td>
+                      <td>MRN-2024-001</td>
+                      <td><strong>Budi Santoso</strong></td>
+                      <td>15 Mar 1985</td>
+                      <td><span class="badge badge-info">Male</span></td>
+                      <td>RS Harapan Kita</td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            📤
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">PAT-002</code>
+                      </td>
+                      <td>MRN-2024-002</td>
+                      <td><strong>Siti Aminah</strong></td>
+                      <td>22 Jul 1990</td>
+                      <td><span class="badge badge-warning">Female</span></td>
+                      <td>Klinik Sehat</td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            📤
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">PAT-003</code>
+                      </td>
+                      <td>MRN-2024-003</td>
+                      <td><strong>Ahmad Fauzi</strong></td>
+                      <td>08 Nov 1978</td>
+                      <td><span class="badge badge-info">Male</span></td>
+                      <td>Lab Prodia</td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            📤
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-lg res-section" data-type="Observation">
+            <div class="card-header">
+              <h3 class="card-title">📊 Observation Resources</h3>
+              <span class="badge badge-success">5 records</span>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Patient</th>
+                      <th>Code</th>
+                      <th>Display</th>
+                      <th>Value</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">OBS-001</code>
+                      </td>
+                      <td>PAT-001</td>
+                      <td><code>8867-4</code></td>
+                      <td>Heart Rate</td>
+                      <td><strong>72</strong> bpm</td>
+                      <td><span class="badge badge-success">Final</span></td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">OBS-002</code>
+                      </td>
+                      <td>PAT-001</td>
+                      <td><code>8480-6</code></td>
+                      <td>Systolic BP</td>
+                      <td><strong>120</strong> mmHg</td>
+                      <td><span class="badge badge-success">Final</span></td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">OBS-003</code>
+                      </td>
+                      <td>PAT-002</td>
+                      <td><code>2339-0</code></td>
+                      <td>Glucose</td>
+                      <td><strong>95</strong> mg/dL</td>
+                      <td><span class="badge badge-success">Final</span></td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card res-section" data-type="Encounter">
+            <div class="card-header">
+              <h3 class="card-title">🏥 Encounter Resources</h3>
+              <span class="badge badge-warning">5 records</span>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Patient</th>
+                      <th>Type</th>
+                      <th>Provider</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">ENC-001</code>
+                      </td>
+                      <td>PAT-001</td>
+                      <td>Ambulatory</td>
+                      <td>Dr. Susanto</td>
+                      <td>Poli Jantung</td>
+                      <td><span class="badge badge-success">Finished</span></td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">ENC-004</code>
+                      </td>
+                      <td>PAT-004</td>
+                      <td>Ambulatory</td>
+                      <td>Dr. Lina</td>
+                      <td>Poli Umum</td>
+                      <td>
+                        <span class="badge badge-warning">In Progress</span>
+                      </td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code style="color: var(--primary-400)">ENC-005</code>
+                      </td>
+                      <td>PAT-005</td>
+                      <td>Inpatient</td>
+                      <td>Dr. Widodo</td>
+                      <td>Ruang Inap</td>
+                      <td>
+                        <span class="badge badge-warning">In Progress</span>
+                      </td>
+                      <td>
+                        <div class="flex gap-sm">
+                          <button class="btn btn-ghost btn-icon btn-sm">
+                            👁️</button
+                          ><button class="btn btn-ghost btn-icon btn-sm">
+                            ✏️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONNECTIONS PAGE -->
+        <div class="page-content page-section" id="page-connections">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon success">✓</div>
+              <div class="stat-content">
+                <div class="stat-label">Online</div>
+                <div class="stat-value">3</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon warning">⏳</div>
+              <div class="stat-content">
+                <div class="stat-label">Pending</div>
+                <div class="stat-value">1</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: rgba(239, 68, 68, 0.15); color: var(--error)"
+              >
+                ✕
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Offline</div>
+                <div class="stat-value">1</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon info">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Resources</div>
+                <div class="stat-value">49,377</div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid"
+            style="
+              grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+              gap: var(--spacing-lg);
+            "
+          >
+            <div class="card">
+              <div class="card-header">
+                <div class="flex items-center gap-md">
+                  <div
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      background: var(--bg-tertiary);
+                      border-radius: var(--radius-lg);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 1.5rem;
+                    "
+                  >
+                    🏥
+                  </div>
+                  <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 600">
+                      RS Harapan Kita
+                    </h3>
+                    <div
+                      class="text-muted font-mono"
+                      style="font-size: 0.75rem"
+                    >
+                      fhir.harapankita.id/r4
+                    </div>
+                  </div>
+                </div>
+                <span class="badge badge-success"
+                  ><span class="status-dot online"></span> Online</span
+                >
+              </div>
+              <div class="card-body">
+                <div class="grid grid-2 gap-md">
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Auth Type
+                    </div>
+                    <div class="font-medium">OAuth2</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Resources
+                    </div>
+                    <div class="font-medium">15,420</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Last Sync
+                    </div>
+                    <div class="font-medium">2 menit lalu</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Response Time
+                    </div>
+                    <div class="font-medium">145ms</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer flex gap-sm">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="testConn('RS Harapan Kita')"
+                >
+                  🔄 Test</button
+                ><button class="btn btn-ghost btn-sm">⚙️ Config</button
+                ><button class="btn btn-ghost btn-sm">🔄 Sync</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex items-center gap-md">
+                  <div
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      background: var(--bg-tertiary);
+                      border-radius: var(--radius-lg);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 1.5rem;
+                    "
+                  >
+                    🔬
+                  </div>
+                  <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 600">
+                      Lab Prodia
+                    </h3>
+                    <div
+                      class="text-muted font-mono"
+                      style="font-size: 0.75rem"
+                    >
+                      api.prodia.co.id/fhir
+                    </div>
+                  </div>
+                </div>
+                <span class="badge badge-success"
+                  ><span class="status-dot online"></span> Online</span
+                >
+              </div>
+              <div class="card-body">
+                <div class="grid grid-2 gap-md">
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Auth Type
+                    </div>
+                    <div class="font-medium">API Key</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Resources
+                    </div>
+                    <div class="font-medium">8,234</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Last Sync
+                    </div>
+                    <div class="font-medium">5 menit lalu</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Response Time
+                    </div>
+                    <div class="font-medium">234ms</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer flex gap-sm">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="testConn('Lab Prodia')"
+                >
+                  🔄 Test</button
+                ><button class="btn btn-ghost btn-sm">⚙️ Config</button
+                ><button class="btn btn-ghost btn-sm">🔄 Sync</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex items-center gap-md">
+                  <div
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      background: var(--bg-tertiary);
+                      border-radius: var(--radius-lg);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 1.5rem;
+                    "
+                  >
+                    🏨
+                  </div>
+                  <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 600">
+                      RS Sardjito
+                    </h3>
+                    <div
+                      class="text-muted font-mono"
+                      style="font-size: 0.75rem"
+                    >
+                      api.sardjito.ac.id/fhir
+                    </div>
+                  </div>
+                </div>
+                <span class="badge badge-error"
+                  ><span class="status-dot offline"></span> Offline</span
+                >
+              </div>
+              <div class="card-body">
+                <div class="grid grid-2 gap-md">
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Auth Type
+                    </div>
+                    <div class="font-medium">OAuth2</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Resources
+                    </div>
+                    <div class="font-medium">22,156</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Last Sync
+                    </div>
+                    <div class="font-medium text-error">18 jam lalu</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Error
+                    </div>
+                    <div class="font-medium text-error">Timeout</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer flex gap-sm">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  onclick="testConn('RS Sardjito')"
+                >
+                  🔄 Test</button
+                ><button class="btn btn-ghost btn-sm">⚙️ Config</button
+                ><button
+                  class="btn btn-danger btn-sm"
+                  onclick="App.showToast('Mencoba reconnect...', 'warning')"
+                >
+                  🔌 Reconnect
+                </button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex items-center gap-md">
+                  <div
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      background: var(--bg-tertiary);
+                      border-radius: var(--radius-lg);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 1.5rem;
+                    "
+                  >
+                    📊
+                  </div>
+                  <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 600">
+                      Sistem Riset Nasional
+                    </h3>
+                    <div
+                      class="text-muted font-mono"
+                      style="font-size: 0.75rem"
+                    >
+                      riset.kemkes.go.id/fhir
+                    </div>
+                  </div>
+                </div>
+                <span class="badge badge-warning"
+                  ><span class="status-dot pending"></span> Pending</span
+                >
+              </div>
+              <div class="card-body">
+                <div class="grid grid-2 gap-md">
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Auth Type
+                    </div>
+                    <div class="font-medium">Client Credentials</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Resources
+                    </div>
+                    <div class="font-medium">-</div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Status
+                    </div>
+                    <div class="font-medium text-warning">
+                      Menunggu approval
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-muted" style="font-size: 0.75rem">
+                      Request Date
+                    </div>
+                    <div class="font-medium">25 Jan 2024</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer flex gap-sm">
+                <button class="btn btn-secondary btn-sm" disabled>
+                  🔄 Test</button
+                ><button class="btn btn-ghost btn-sm">⚙️ Config</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGS PAGE -->
+        <div class="page-content page-section" id="page-logs">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon primary">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Hari Ini</div>
+                <div class="stat-value">245</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon success">✓</div>
+              <div class="stat-content">
+                <div class="stat-label">Sukses</div>
+                <div class="stat-value">241</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: rgba(239, 68, 68, 0.15); color: var(--error)"
+              >
+                ✕
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Error</div>
+                <div class="stat-value">4</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon info">⚡</div>
+              <div class="stat-content">
+                <div class="stat-label">Avg Response</div>
+                <div class="stat-value">187ms</div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-lg">
+            <div class="card-body">
+              <div class="flex items-center gap-md" style="flex-wrap: wrap">
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Status</option>
+                  <option>Success</option>
+                  <option>Error</option>
+                </select>
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Resource</option>
+                  <option>Patient</option>
+                  <option>Observation</option>
+                  <option>Encounter</option>
+                </select>
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Koneksi</option>
+                  <option>RS Harapan Kita</option>
+                  <option>Lab Prodia</option>
+                  <option>Klinik Sehat</option>
+                </select>
+                <div style="flex: 1"></div>
+                <input
+                  type="text"
+                  class="form-input search-input"
+                  placeholder="Cari log..."
+                  style="max-width: 250px"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📜 Riwayat Pertukaran</h3>
+              <span class="text-muted">Menampilkan 8 dari 245 log</span>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Koneksi</th>
+                      <th>Resource</th>
+                      <th>Operasi</th>
+                      <th>Status</th>
+                      <th>Response</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:30:15</code></td>
+                      <td>RS Harapan Kita</td>
+                      <td><span class="badge badge-primary">Patient</span></td>
+                      <td>READ</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">145ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="App.openModal('logDetailModal')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:28:45</code></td>
+                      <td>Lab Prodia</td>
+                      <td><span class="badge badge-info">Observation</span></td>
+                      <td>CREATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">234ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="App.openModal('logDetailModal')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:25:30</code></td>
+                      <td>Klinik Sehat</td>
+                      <td>
+                        <span class="badge badge-warning">Encounter</span>
+                      </td>
+                      <td>UPDATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">178ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="App.openModal('logDetailModal')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:20:00</code></td>
+                      <td>RS Sardjito</td>
+                      <td><span class="badge badge-primary">Patient</span></td>
+                      <td>SEARCH</td>
+                      <td><span class="badge badge-error">Error</span></td>
+                      <td class="text-error">5000ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="App.openModal('logDetailModal')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:15:22</code></td>
+                      <td>RS Harapan Kita</td>
+                      <td><span class="badge badge-info">Observation</span></td>
+                      <td>READ</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">89ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="App.openModal('logDetailModal')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer flex justify-between items-center">
+              <span class="text-muted">Halaman 1 dari 31</span>
+              <div class="flex gap-sm">
+                <button class="btn btn-secondary btn-sm" disabled>← Prev</button
+                ><button class="btn btn-secondary btn-sm">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="sendModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">📤 Kirim FHIR Resource</h3>
+          <button class="modal-close" data-modal-close>✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Tipe Resource</label
+            ><select class="form-select">
+              <option>Patient</option>
+              <option>Observation</option>
+              <option>Encounter</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sistem Tujuan</label
+            ><select class="form-select">
+              <option>RS Harapan Kita</option>
+              <option>Lab Prodia</option>
+              <option>Klinik Sehat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Resource ID</label
+            ><input
+              type="text"
+              class="form-input"
+              placeholder="Masukkan ID resource"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-modal-close>Batal</button
+          ><button
+            class="btn btn-primary"
+            onclick="
+              App.showToast('Resource berhasil dikirim!', 'success');
+              App.closeModal(document.getElementById('sendModal'));
+            "
+          >
+            Kirim
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" id="validateModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">✅ Validasi FHIR Resource</h3>
+          <button class="modal-close" data-modal-close>✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">JSON Resource</label
+            ><textarea
+              class="form-textarea"
+              rows="8"
+              placeholder='{"resourceType": "Patient", "id": "example", ...}'
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-modal-close>Batal</button
+          ><button
+            class="btn btn-success"
+            onclick="
+              App.showToast(
+                'Resource valid sesuai standar FHIR R4!',
+                'success',
+              );
+              App.closeModal(document.getElementById('validateModal'));
+            "
+          >
+            Validasi
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" id="logDetailModal">
+      <div class="modal" style="max-width: 650px">
+        <div class="modal-header">
+          <h3 class="modal-title">📋 Detail Log</h3>
+          <button class="modal-close" data-modal-close>✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="grid grid-2 gap-md mb-lg">
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Log ID</div>
+              <div class="font-medium font-mono">LOG-001</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Timestamp</div>
+              <div class="font-medium">27 Jan 2024, 12:30:15</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Koneksi</div>
+              <div class="font-medium">RS Harapan Kita</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Status</div>
+              <div><span class="badge badge-success">Success</span></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Request Payload</label>
+            <div
+              style="
+                background: var(--bg-tertiary);
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+              "
+            >
+              <pre style="margin: 0; color: var(--text-secondary)">
+{"resourceType":"Patient","id":"PAT-001"}</pre
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Response</label>
+            <div
+              style="
+                background: var(--bg-tertiary);
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+              "
+            >
+              <pre style="margin: 0; color: var(--text-secondary)">
+{"resourceType":"Patient","id":"PAT-001","identifier":[{"value":"MRN-2024-001"}],"name":[{"given":["Budi"],"family":"Santoso"}],"gender":"male","birthDate":"1985-03-15"}</pre
+              >
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-modal-close>Tutup</button
+          ><button
+            class="btn btn-primary"
+            onclick="App.showToast('Payload disalin!', 'success')"
+          >
+            📋 Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      const pageNames = {
+        dashboard: "Dashboard",
+        resources: "FHIR Resources",
+        connections: "Koneksi Sistem",
+        logs: "Log Pertukaran",
+      };
+      function showPage(page) {
+        document
+          .querySelectorAll(".page-section")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + page).classList.add("active");
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        event.target.closest(".nav-item").classList.add("active");
+        document.getElementById("pageTitle").textContent = pageNames[page];
+        document.getElementById("pageBreadcrumb").textContent = pageNames[page];
+      }
+      function filterRes(type, el) {
+        document
+          .querySelectorAll(".resource-tag")
+          .forEach((t) => t.classList.remove("active"));
+        el.classList.add("active");
+        document
+          .querySelectorAll(".res-section")
+          .forEach(
+            (s) =>
+              (s.style.display =
+                type === "all" || s.dataset.type === type ? "block" : "none"),
+          );
+      }
+      function searchRes(q) {
+        q = q.toLowerCase();
+        document
+          .querySelectorAll("#page-resources .data-table tbody tr")
+          .forEach(
+            (r) =>
+              (r.style.display = r.textContent.toLowerCase().includes(q)
+                ? ""
+                : "none"),
+          );
+      }
+      function testConn(name) {
+        App.showToast("Testing koneksi ke " + name + "...", "info");
+        setTimeout(
+          () =>
+            App.showToast(
+              "Koneksi ke " + name + " berhasil! (180ms)",
+              "success",
+            ),
+          1500,
+        );
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR Resources - FHIR Interoperability System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🔗</div>
+                    <div>
+                        <div class="logo-text">FHIR Hub</div>
+                        <div class="logo-subtitle">Interoperability System</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Menu Utama</div>
+                    <a href="index.html" class="nav-item"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+                    <a href="resources.html" class="nav-item active"><span class="nav-icon">📋</span><span>FHIR Resources</span><span class="nav-badge">3</span></a>
+                    <a href="connections.html" class="nav-item"><span class="nav-icon">🔌</span><span>Koneksi Sistem</span></a>
+                    <a href="logs.html" class="nav-item"><span class="nav-icon">📜</span><span>Log Pertukaran</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin System</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle">☰</button>
+                    <div>
+                        <h1 class="page-title">FHIR Resources</h1>
+                        <div class="breadcrumb">
+                            <span>FHIR Hub</span>
+                            <span class="breadcrumb-separator">/</span>
+                            <span>Resources</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary" onclick="App.openModal('addResourceModal')">+ Tambah Resource</button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Resource Type Tabs -->
+                <div class="card mb-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-md" style="flex-wrap: wrap;">
+                            <div class="resource-tags">
+                                <span class="resource-tag active" onclick="filterResources('all')">Semua</span>
+                                <span class="resource-tag" onclick="filterResources('Patient')">👥 Patient</span>
+                                <span class="resource-tag" onclick="filterResources('Observation')">📊 Observation</span>
+                                <span class="resource-tag" onclick="filterResources('Encounter')">🏥 Encounter</span>
+                            </div>
+                            <div style="flex: 1;"></div>
+                            <input type="text" class="form-input search-input" placeholder="Cari resource..." style="max-width: 300px;" id="searchInput" oninput="searchResources()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Resources -->
+                <div class="card mb-lg resource-section" data-type="Patient">
+                    <div class="card-header">
+                        <h3 class="card-title">👥 Patient Resources</h3>
+                        <span class="badge badge-primary">5 records</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Identifier</th>
+                                        <th>Nama</th>
+                                        <th>Tanggal Lahir</th>
+                                        <th>Gender</th>
+                                        <th>Sumber</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patientTable">
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">PAT-001</code></td>
+                                        <td>MRN-2024-001</td>
+                                        <td><strong>Budi Santoso</strong></td>
+                                        <td>15 Mar 1985</td>
+                                        <td><span class="badge badge-info">Male</span></td>
+                                        <td>RS Harapan Kita</td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm" title="View">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm" title="Edit">✏️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm" title="Send">📤</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">PAT-002</code></td>
+                                        <td>MRN-2024-002</td>
+                                        <td><strong>Siti Aminah</strong></td>
+                                        <td>22 Jul 1990</td>
+                                        <td><span class="badge badge-warning">Female</span></td>
+                                        <td>Klinik Sehat</td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">📤</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">PAT-003</code></td>
+                                        <td>MRN-2024-003</td>
+                                        <td><strong>Ahmad Fauzi</strong></td>
+                                        <td>08 Nov 1978</td>
+                                        <td><span class="badge badge-info">Male</span></td>
+                                        <td>Lab Prodia</td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">📤</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observation Resources -->
+                <div class="card mb-lg resource-section" data-type="Observation">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Observation Resources</h3>
+                        <span class="badge badge-success">5 records</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Patient</th>
+                                        <th>Code</th>
+                                        <th>Display</th>
+                                        <th>Value</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">OBS-001</code></td>
+                                        <td>PAT-001</td>
+                                        <td><code>8867-4</code></td>
+                                        <td>Heart Rate</td>
+                                        <td><strong>72</strong> bpm</td>
+                                        <td><span class="badge badge-success">Final</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">OBS-002</code></td>
+                                        <td>PAT-001</td>
+                                        <td><code>8480-6</code></td>
+                                        <td>Systolic BP</td>
+                                        <td><strong>120</strong> mmHg</td>
+                                        <td><span class="badge badge-success">Final</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">OBS-003</code></td>
+                                        <td>PAT-002</td>
+                                        <td><code>2339-0</code></td>
+                                        <td>Glucose</td>
+                                        <td><strong>95</strong> mg/dL</td>
+                                        <td><span class="badge badge-success">Final</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Encounter Resources -->
+                <div class="card resource-section" data-type="Encounter">
+                    <div class="card-header">
+                        <h3 class="card-title">🏥 Encounter Resources</h3>
+                        <span class="badge badge-warning">5 records</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Patient</th>
+                                        <th>Type</th>
+                                        <th>Provider</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">ENC-001</code></td>
+                                        <td>PAT-001</td>
+                                        <td>Ambulatory</td>
+                                        <td>Dr. Susanto</td>
+                                        <td>Poli Jantung</td>
+                                        <td><span class="badge badge-success">Finished</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">ENC-004</code></td>
+                                        <td>PAT-004</td>
+                                        <td>Ambulatory</td>
+                                        <td>Dr. Lina</td>
+                                        <td>Poli Umum</td>
+                                        <td><span class="badge badge-warning">In Progress</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color: var(--primary-400);">ENC-005</code></td>
+                                        <td>PAT-005</td>
+                                        <td>Inpatient</td>
+                                        <td>Dr. Widodo</td>
+                                        <td>Ruang Inap</td>
+                                        <td><span class="badge badge-warning">In Progress</span></td>
+                                        <td>
+                                            <div class="flex gap-sm">
+                                                <button class="btn btn-ghost btn-icon btn-sm">👁️</button>
+                                                <button class="btn btn-ghost btn-icon btn-sm">✏️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Resource Modal -->
+    <div class="modal-overlay" id="addResourceModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">+ Tambah FHIR Resource</h3>
+                <button class="modal-close" data-modal-close>✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Tipe Resource</label>
+                    <select class="form-select" id="resourceType" onchange="toggleResourceForm()">
+                        <option value="Patient">Patient</option>
+                        <option value="Observation">Observation</option>
+                        <option value="Encounter">Encounter</option>
+                    </select>
+                </div>
+                <!-- Patient Form -->
+                <div id="patientForm">
+                    <div class="grid grid-2 gap-md">
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-input" placeholder="Nama pasien">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Identifier (MRN)</label>
+                            <input type="text" class="form-input" placeholder="MRN-2024-XXX">
+                        </div>
+                    </div>
+                    <div class="grid grid-2 gap-md">
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Lahir</label>
+                            <input type="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select">
+                                <option>male</option>
+                                <option>female</option>
+                                <option>other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" class="form-input" placeholder="Alamat lengkap">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telepon</label>
+                        <input type="text" class="form-input" placeholder="+62 xxx-xxxx-xxxx">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Batal</button>
+                <button class="btn btn-primary" onclick="App.showToast('Resource berhasil ditambahkan!', 'success'); App.closeModal(document.getElementById('addResourceModal'));">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function filterResources(type) {
+            document.querySelectorAll('.resource-tag').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.resource-section').forEach(s => {
+                s.style.display = (type === 'all' || s.dataset.type === type) ? 'block' : 'none';
+            });
+        }
+        function searchResources() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.data-table tbody tr').forEach(r => {
+                r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

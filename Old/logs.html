@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Pertukaran - FHIR Interoperability System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <div class="logo-icon">🔗</div>
+            <div>
+              <div class="logo-text">FHIR Hub</div>
+              <div class="logo-subtitle">Interoperability System</div>
+            </div>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <div class="nav-section">
+            <div class="nav-section-title">Menu Utama</div>
+            <a href="index.html" class="nav-item"
+              ><span class="nav-icon">📊</span><span>Dashboard</span></a
+            >
+            <a href="resources.html" class="nav-item"
+              ><span class="nav-icon">📋</span><span>FHIR Resources</span></a
+            >
+            <a href="connections.html" class="nav-item"
+              ><span class="nav-icon">🔌</span><span>Koneksi Sistem</span></a
+            >
+            <a href="logs.html" class="nav-item active"
+              ><span class="nav-icon">📜</span><span>Log Pertukaran</span></a
+            >
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="user-avatar">AD</div>
+            <div class="user-info">
+              <div class="user-name">Admin System</div>
+              <div class="user-role">Administrator</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="header">
+          <div class="header-left">
+            <button class="menu-toggle">☰</button>
+            <div>
+              <h1 class="page-title">Log Pertukaran Data</h1>
+              <div class="breadcrumb">
+                <span>FHIR Hub</span><span class="breadcrumb-separator">/</span
+                ><span>Logs</span>
+              </div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="btn btn-secondary"
+              onclick="App.showToast('Log diekspor ke CSV', 'success')"
+            >
+              📥 Export
+            </button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon primary">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Hari Ini</div>
+                <div class="stat-value">245</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon success">✓</div>
+              <div class="stat-content">
+                <div class="stat-label">Sukses</div>
+                <div class="stat-value">241</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: rgba(239, 68, 68, 0.15); color: var(--error)"
+              >
+                ✕
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Error</div>
+                <div class="stat-value">4</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon info">⚡</div>
+              <div class="stat-content">
+                <div class="stat-label">Avg Response</div>
+                <div class="stat-value">187ms</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="card mb-lg">
+            <div class="card-body">
+              <div class="flex items-center gap-md" style="flex-wrap: wrap">
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Status</option>
+                  <option>Success</option>
+                  <option>Error</option>
+                </select>
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Resource</option>
+                  <option>Patient</option>
+                  <option>Observation</option>
+                  <option>Encounter</option>
+                </select>
+                <select class="form-select" style="max-width: 180px">
+                  <option>Semua Koneksi</option>
+                  <option>RS Harapan Kita</option>
+                  <option>Lab Prodia</option>
+                  <option>Klinik Sehat</option>
+                </select>
+                <div style="flex: 1"></div>
+                <input
+                  type="text"
+                  class="form-input search-input"
+                  placeholder="Cari log..."
+                  style="max-width: 250px"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Logs Table -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📜 Riwayat Pertukaran</h3>
+              <span class="text-muted">Menampilkan 8 dari 245 log</span>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Koneksi</th>
+                      <th>Resource</th>
+                      <th>Operasi</th>
+                      <th>Status</th>
+                      <th>Response</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:30:15</code></td>
+                      <td>RS Harapan Kita</td>
+                      <td><span class="badge badge-primary">Patient</span></td>
+                      <td>READ</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">145ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-001')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:28:45</code></td>
+                      <td>Lab Prodia</td>
+                      <td><span class="badge badge-info">Observation</span></td>
+                      <td>CREATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">234ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-002')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:25:30</code></td>
+                      <td>Klinik Sehat</td>
+                      <td>
+                        <span class="badge badge-warning">Encounter</span>
+                      </td>
+                      <td>UPDATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">178ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-003')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:20:00</code></td>
+                      <td>RS Sardjito</td>
+                      <td><span class="badge badge-primary">Patient</span></td>
+                      <td>SEARCH</td>
+                      <td><span class="badge badge-error">Error</span></td>
+                      <td class="text-error">5000ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-004')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:15:22</code></td>
+                      <td>RS Harapan Kita</td>
+                      <td><span class="badge badge-info">Observation</span></td>
+                      <td>READ</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">89ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-005')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:10:18</code></td>
+                      <td>Lab Prodia</td>
+                      <td>
+                        <span class="badge badge-success"
+                          >DiagnosticReport</span
+                        >
+                      </td>
+                      <td>CREATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">312ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-006')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:05:45</code></td>
+                      <td>Klinik Sehat</td>
+                      <td><span class="badge badge-primary">Patient</span></td>
+                      <td>CREATE</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">156ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-007')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code class="text-muted">27 Jan 12:00:30</code></td>
+                      <td>RS Harapan Kita</td>
+                      <td>
+                        <span class="badge badge-warning">Encounter</span>
+                      </td>
+                      <td>SEARCH</td>
+                      <td><span class="badge badge-success">Success</span></td>
+                      <td class="text-success">203ms</td>
+                      <td>
+                        <button
+                          class="btn btn-ghost btn-sm"
+                          onclick="showLogDetail('LOG-008')"
+                        >
+                          Detail
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer flex justify-between items-center">
+              <span class="text-muted">Halaman 1 dari 31</span>
+              <div class="flex gap-sm">
+                <button class="btn btn-secondary btn-sm" disabled>
+                  ← Prev
+                </button>
+                <button class="btn btn-secondary btn-sm">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Log Detail Modal -->
+    <div class="modal-overlay" id="logDetailModal">
+      <div class="modal" style="max-width: 650px">
+        <div class="modal-header">
+          <h3 class="modal-title">📋 Detail Log</h3>
+          <button class="modal-close" data-modal-close>✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="grid grid-2 gap-md mb-lg">
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Log ID</div>
+              <div class="font-medium font-mono">LOG-001</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Timestamp</div>
+              <div class="font-medium">27 Jan 2024, 12:30:15</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Koneksi</div>
+              <div class="font-medium">RS Harapan Kita</div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size: 0.75rem">Status</div>
+              <div><span class="badge badge-success">Success</span></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Request Payload</label>
+            <div
+              style="
+                background: var(--bg-tertiary);
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+                overflow-x: auto;
+              "
+            >
+              <pre style="margin: 0; color: var(--text-secondary)">
+{
+  "resourceType": "Patient",
+  "id": "PAT-001"
+}</pre
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Response</label>
+            <div
+              style="
+                background: var(--bg-tertiary);
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+                overflow-x: auto;
+              "
+            >
+              <pre style="margin: 0; color: var(--text-secondary)">
+{
+  "resourceType": "Patient",
+  "id": "PAT-001",
+  "identifier": [{"value": "MRN-2024-001"}],
+  "name": [{"given": ["Budi"], "family": "Santoso"}],
+  "gender": "male",
+  "birthDate": "1985-03-15"
+}</pre
+              >
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-modal-close>Tutup</button>
+          <button
+            class="btn btn-primary"
+            onclick="App.showToast('Payload disalin!', 'success')"
+          >
+            📋 Copy Payload
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      function showLogDetail(logId) {
+        App.openModal("logDetailModal");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koneksi Sistem - FHIR Interoperability System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🔗</div>
+                    <div>
+                        <div class="logo-text">FHIR Hub</div>
+                        <div class="logo-subtitle">Interoperability System</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Menu Utama</div>
+                    <a href="index.html" class="nav-item"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+                    <a href="resources.html" class="nav-item"><span class="nav-icon">📋</span><span>FHIR Resources</span></a>
+                    <a href="connections.html" class="nav-item active"><span class="nav-icon">🔌</span><span>Koneksi Sistem</span></a>
+                    <a href="logs.html" class="nav-item"><span class="nav-icon">📜</span><span>Log Pertukaran</span></a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin System</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle">☰</button>
+                    <div>
+                        <h1 class="page-title">Koneksi Sistem</h1>
+                        <div class="breadcrumb"><span>FHIR Hub</span><span class="breadcrumb-separator">/</span><span>Koneksi</span></div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary" onclick="App.openModal('addConnectionModal')">+ Tambah Koneksi</button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon success">✓</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Online</div>
+                            <div class="stat-value">3</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">⏳</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Pending</div>
+                            <div class="stat-value">1</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--error);">✕</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Offline</div>
+                            <div class="stat-value">1</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">📊</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Resources</div>
+                            <div class="stat-value">49,377</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connections Grid -->
+                <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: var(--spacing-lg);">
+                    <!-- Connection 1 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex items-center gap-md">
+                                <div style="width:48px;height:48px;background:var(--bg-tertiary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏥</div>
+                                <div>
+                                    <h3 style="font-size: 1.1rem; font-weight: 600;">RS Harapan Kita</h3>
+                                    <div class="text-muted font-mono" style="font-size: 0.75rem;">fhir.harapankita.id/r4</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-success"><span class="status-dot online"></span> Online</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-2 gap-md mb-md">
+                                <div><div class="text-muted" style="font-size:0.75rem;">Auth Type</div><div class="font-medium">OAuth2</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Resources</div><div class="font-medium">15,420</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Last Sync</div><div class="font-medium">2 menit lalu</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Response Time</div><div class="font-medium">145ms</div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer flex gap-sm">
+                            <button class="btn btn-secondary btn-sm" onclick="testConnection('RS Harapan Kita')">🔄 Test</button>
+                            <button class="btn btn-ghost btn-sm">⚙️ Config</button>
+                            <button class="btn btn-ghost btn-sm">🔄 Sync</button>
+                        </div>
+                    </div>
+
+                    <!-- Connection 2 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex items-center gap-md">
+                                <div style="width:48px;height:48px;background:var(--bg-tertiary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🔬</div>
+                                <div>
+                                    <h3 style="font-size: 1.1rem; font-weight: 600;">Lab Prodia</h3>
+                                    <div class="text-muted font-mono" style="font-size: 0.75rem;">api.prodia.co.id/fhir</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-success"><span class="status-dot online"></span> Online</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-2 gap-md mb-md">
+                                <div><div class="text-muted" style="font-size:0.75rem;">Auth Type</div><div class="font-medium">API Key</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Resources</div><div class="font-medium">8,234</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Last Sync</div><div class="font-medium">5 menit lalu</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Response Time</div><div class="font-medium">234ms</div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer flex gap-sm">
+                            <button class="btn btn-secondary btn-sm" onclick="testConnection('Lab Prodia')">🔄 Test</button>
+                            <button class="btn btn-ghost btn-sm">⚙️ Config</button>
+                            <button class="btn btn-ghost btn-sm">🔄 Sync</button>
+                        </div>
+                    </div>
+
+                    <!-- Connection 3 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex items-center gap-md">
+                                <div style="width:48px;height:48px;background:var(--bg-tertiary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏨</div>
+                                <div>
+                                    <h3 style="font-size: 1.1rem; font-weight: 600;">RS Sardjito</h3>
+                                    <div class="text-muted font-mono" style="font-size: 0.75rem;">api.sardjito.ac.id/fhir</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-error"><span class="status-dot offline"></span> Offline</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-2 gap-md mb-md">
+                                <div><div class="text-muted" style="font-size:0.75rem;">Auth Type</div><div class="font-medium">OAuth2</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Resources</div><div class="font-medium">22,156</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Last Sync</div><div class="font-medium text-error">18 jam lalu</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Error</div><div class="font-medium text-error">Timeout</div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer flex gap-sm">
+                            <button class="btn btn-secondary btn-sm" onclick="testConnection('RS Sardjito')">🔄 Test</button>
+                            <button class="btn btn-ghost btn-sm">⚙️ Config</button>
+                            <button class="btn btn-danger btn-sm" onclick="App.showToast('Mencoba reconnect...', 'warning')">🔌 Reconnect</button>
+                        </div>
+                    </div>
+
+                    <!-- Connection 4 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex items-center gap-md">
+                                <div style="width:48px;height:48px;background:var(--bg-tertiary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">📊</div>
+                                <div>
+                                    <h3 style="font-size: 1.1rem; font-weight: 600;">Sistem Riset Nasional</h3>
+                                    <div class="text-muted font-mono" style="font-size: 0.75rem;">riset.kemkes.go.id/fhir</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-warning"><span class="status-dot pending"></span> Pending</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid grid-2 gap-md mb-md">
+                                <div><div class="text-muted" style="font-size:0.75rem;">Auth Type</div><div class="font-medium">Client Credentials</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Resources</div><div class="font-medium">-</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Status</div><div class="font-medium text-warning">Menunggu approval</div></div>
+                                <div><div class="text-muted" style="font-size:0.75rem;">Request Date</div><div class="font-medium">25 Jan 2024</div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer flex gap-sm">
+                            <button class="btn btn-secondary btn-sm" disabled>🔄 Test</button>
+                            <button class="btn btn-ghost btn-sm">⚙️ Config</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Connection Modal -->
+    <div class="modal-overlay" id="addConnectionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">+ Tambah Koneksi Sistem</h3>
+                <button class="modal-close" data-modal-close>✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Sistem</label>
+                    <input type="text" class="form-input" placeholder="Nama rumah sakit/klinik/lab">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">FHIR Endpoint URL</label>
+                    <input type="text" class="form-input" placeholder="https://fhir.example.com/r4">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipe Autentikasi</label>
+                    <select class="form-select">
+                        <option>OAuth2</option>
+                        <option>API Key</option>
+                        <option>Client Credentials</option>
+                        <option>Basic Auth</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Client ID / API Key</label>
+                    <input type="text" class="form-input" placeholder="Masukkan credentials">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Batal</button>
+                <button class="btn btn-primary" onclick="App.showToast('Koneksi berhasil ditambahkan!', 'success'); App.closeModal(document.getElementById('addConnectionModal'));">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function testConnection(name) {
+            App.showToast(`Testing koneksi ke ${name}...`, 'info');
+            setTimeout(() => App.showToast(`Koneksi ke ${name} berhasil! (180ms)`, 'success'), 1500);
+        }
+    </script>
+</body>
+</html>

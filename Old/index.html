@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR Interoperability System - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🔗</div>
+                    <div>
+                        <div class="logo-text">FHIR Hub</div>
+                        <div class="logo-subtitle">Interoperability System</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Menu Utama</div>
+                    <a href="index.html" class="nav-item active">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="resources.html" class="nav-item">
+                        <span class="nav-icon">📋</span>
+                        <span>FHIR Resources</span>
+                        <span class="nav-badge">3</span>
+                    </a>
+                    <a href="connections.html" class="nav-item">
+                        <span class="nav-icon">🔌</span>
+                        <span>Koneksi Sistem</span>
+                    </a>
+                    <a href="logs.html" class="nav-item">
+                        <span class="nav-icon">📜</span>
+                        <span>Log Pertukaran</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Aksi</div>
+                    <div class="nav-item" onclick="App.openModal('sendModal')">
+                        <span class="nav-icon">📤</span>
+                        <span>Kirim Resource</span>
+                    </div>
+                    <div class="nav-item" onclick="App.openModal('validateModal')">
+                        <span class="nav-icon">✅</span>
+                        <span>Validasi Data</span>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin System</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle">☰</button>
+                    <div>
+                        <h1 class="page-title">Dashboard</h1>
+                        <div class="breadcrumb">
+                            <span>FHIR Hub</span>
+                            <span class="breadcrumb-separator">/</span>
+                            <span>Dashboard</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn"><span class="notification-dot"></span>🔔</button>
+                    <button class="header-btn">⚙️</button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">👥</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Pasien</div>
+                            <div class="stat-value">1,247</div>
+                            <span class="stat-change positive">↑ 12% bulan ini</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">📊</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Observations</div>
+                            <div class="stat-value">8,934</div>
+                            <span class="stat-change positive">↑ 8% bulan ini</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">🏥</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Encounters</div>
+                            <div class="stat-value">2,156</div>
+                            <span class="stat-change positive">↑ 5% bulan ini</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">🔗</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Koneksi Aktif</div>
+                            <div class="stat-value">3/5</div>
+                            <span class="stat-change negative">1 offline</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2 gap-lg" style="grid-template-columns: 2fr 1fr;">
+                    <!-- Activity Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📈 Aktivitas Pertukaran Data</h3>
+                            <div class="resource-tags">
+                                <span class="resource-tag active">Hari Ini</span>
+                                <span class="resource-tag">Minggu Ini</span>
+                                <span class="resource-tag">Bulan Ini</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" id="activityChart">
+                                <svg viewBox="0 0 600 200" style="width:100%; height:100%;">
+                                    <defs>
+                                        <linearGradient id="sendGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#00bcd4;stop-opacity:0.5"/>
+                                            <stop offset="100%" style="stop-color:#00bcd4;stop-opacity:0"/>
+                                        </linearGradient>
+                                        <linearGradient id="recvGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.5"/>
+                                            <stop offset="100%" style="stop-color:#10b981;stop-opacity:0"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M0,180 L100,160 L200,100 L300,60 L400,90 L500,120 L600,140 L600,200 L0,200 Z" fill="url(#sendGrad)"/>
+                                    <path d="M0,170 L100,150 L200,90 L300,50 L400,85 L500,130 L600,150" stroke="#00bcd4" stroke-width="3" fill="none"/>
+                                    <path d="M0,175 L100,155 L200,85 L300,45 L400,95 L500,135 L600,155 L600,200 L0,200 Z" fill="url(#recvGrad)"/>
+                                    <path d="M0,175 L100,155 L200,85 L300,45 L400,95 L500,135 L600,155" stroke="#10b981" stroke-width="3" fill="none"/>
+                                    <circle cx="300" cy="50" r="5" fill="#00bcd4"/>
+                                    <circle cx="300" cy="45" r="5" fill="#10b981"/>
+                                </svg>
+                                <div class="flex justify-between mt-md text-muted" style="font-size: 0.8rem;">
+                                    <span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-lg mt-md" style="justify-content: center;">
+                                <div class="flex items-center gap-sm"><span style="width:12px;height:12px;background:#00bcd4;border-radius:2px;"></span><span class="text-muted">Dikirim</span></div>
+                                <div class="flex items-center gap-sm"><span style="width:12px;height:12px;background:#10b981;border-radius:2px;"></span><span class="text-muted">Diterima</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Status -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🔌 Status Koneksi</h3>
+                            <a href="connections.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="connection-list">
+                                <div class="connection-item">
+                                    <div class="connection-icon">🏥</div>
+                                    <div class="connection-info">
+                                        <div class="connection-name">RS Harapan Kita</div>
+                                        <div class="connection-url">fhir.harapankita.id</div>
+                                    </div>
+                                    <div class="connection-status">
+                                        <span class="status-dot online"></span>
+                                        <span class="text-success">Online</span>
+                                    </div>
+                                </div>
+                                <div class="connection-item">
+                                    <div class="connection-icon">🔬</div>
+                                    <div class="connection-info">
+                                        <div class="connection-name">Lab Prodia</div>
+                                        <div class="connection-url">api.prodia.co.id</div>
+                                    </div>
+                                    <div class="connection-status">
+                                        <span class="status-dot online"></span>
+                                        <span class="text-success">Online</span>
+                                    </div>
+                                </div>
+                                <div class="connection-item">
+                                    <div class="connection-icon">🏨</div>
+                                    <div class="connection-info">
+                                        <div class="connection-name">RS Sardjito</div>
+                                        <div class="connection-url">api.sardjito.ac.id</div>
+                                    </div>
+                                    <div class="connection-status">
+                                        <span class="status-dot offline"></span>
+                                        <span class="text-error">Offline</span>
+                                    </div>
+                                </div>
+                                <div class="connection-item">
+                                    <div class="connection-icon">📊</div>
+                                    <div class="connection-info">
+                                        <div class="connection-name">Sistem Riset</div>
+                                        <div class="connection-url">riset.kemkes.go.id</div>
+                                    </div>
+                                    <div class="connection-status">
+                                        <span class="status-dot pending"></span>
+                                        <span class="text-warning">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Recent Activity -->
+                <div class="grid grid-2 gap-lg mt-lg">
+                    <!-- Quick Actions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">⚡ Aksi Cepat</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-actions">
+                                <a href="resources.html?type=Patient" class="quick-action">
+                                    <div class="quick-action-icon">👥</div>
+                                    <div class="quick-action-text">Kelola Pasien</div>
+                                </a>
+                                <div class="quick-action" onclick="App.openModal('sendModal')">
+                                    <div class="quick-action-icon">📤</div>
+                                    <div class="quick-action-text">Kirim Resource</div>
+                                </div>
+                                <div class="quick-action" onclick="App.openModal('validateModal')">
+                                    <div class="quick-action-icon">✅</div>
+                                    <div class="quick-action-text">Validasi FHIR</div>
+                                </div>
+                                <a href="connections.html" class="quick-action">
+                                    <div class="quick-action-icon">🔗</div>
+                                    <div class="quick-action-text">Tambah Koneksi</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🕐 Aktivitas Terbaru</h3>
+                            <a href="logs.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-timeline">
+                                <div class="activity-item">
+                                    <div class="activity-dot send"></div>
+                                    <div class="activity-content">
+                                        <div class="activity-title"><strong>Patient</strong> dikirim ke RS Harapan Kita</div>
+                                        <div class="activity-meta">145ms • 2 menit lalu</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-dot receive"></div>
+                                    <div class="activity-content">
+                                        <div class="activity-title"><strong>Observation</strong> diterima dari Lab Prodia</div>
+                                        <div class="activity-meta">234ms • 5 menit lalu</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-dot error"></div>
+                                    <div class="activity-content">
+                                        <div class="activity-title"><strong>Error</strong> koneksi ke RS Sardjito timeout</div>
+                                        <div class="activity-meta">5000ms • 15 menit lalu</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-dot send"></div>
+                                    <div class="activity-content">
+                                        <div class="activity-title"><strong>Encounter</strong> di-update di Klinik Sehat</div>
+                                        <div class="activity-meta">178ms • 20 menit lalu</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Send Resource Modal -->
+    <div class="modal-overlay" id="sendModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📤 Kirim FHIR Resource</h3>
+                <button class="modal-close" data-modal-close>✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Tipe Resource</label>
+                    <select class="form-select">
+                        <option>Patient</option>
+                        <option>Observation</option>
+                        <option>Encounter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sistem Tujuan</label>
+                    <select class="form-select">
+                        <option>RS Harapan Kita</option>
+                        <option>Lab Prodia</option>
+                        <option>Klinik Sehat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Resource ID</label>
+                    <input type="text" class="form-input" placeholder="Masukkan ID resource">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Batal</button>
+                <button class="btn btn-primary" onclick="App.showToast('Resource berhasil dikirim!', 'success'); App.closeModal(document.getElementById('sendModal'));">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validate Modal -->
+    <div class="modal-overlay" id="validateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">✅ Validasi FHIR Resource</h3>
+                <button class="modal-close" data-modal-close>✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">JSON Resource</label>
+                    <textarea class="form-textarea" rows="8" placeholder='{"resourceType": "Patient", "id": "example", ...}'></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Batal</button>
+                <button class="btn btn-success" onclick="App.showToast('Resource valid sesuai standar FHIR R4!', 'success'); App.closeModal(document.getElementById('validateModal'));">Validasi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
